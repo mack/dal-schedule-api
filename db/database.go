@@ -3,6 +3,7 @@ package db
 import (
   _ "github.com/go-sql-driver/mysql"
   "database/sql"
+  "encoding/json"
 )
 
 type Class struct {
@@ -17,15 +18,33 @@ type Class struct {
   Max string `json:"max"` // make this int array
   Current string `json:"current"` // make this int array
   Waitlist string `json:"waitlist"`
-  prof string `json:"prof"`
+  Prof string `json:"prof"`
 }
 
 type Course struct {
   Title string `json:"title"`
 }
 
-func Open() {
+func Open() []byte {
   db, err := sql.Open("mysql", "root:lalaland123@/dal")
 
+  // seeing if I can get a working json return
+  var queryStr string = "SELECT * FROM classes"
+  rows, _ := db.Query(queryStr)
+
+  var storage struct {
+    Data []Class  `json:"data"`
+  }
+
+  defer rows.Close()
+  for rows.Next() {
+    var c Class
+    rows.Scan(&c.Id, &c.Crn, &c.Section, &c.Type, &c.CreditHours, &c.Days, &c.Times, &c.Location, &c.Max, &c.Current, &c.Waitlist, &c.Prof)
+    storage.Data = append(storage.Data, c)
+  }
+
+  p, _ := json.Marshal(storage)
+
+  return p;
 
 }

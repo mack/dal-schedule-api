@@ -3,6 +3,7 @@ package main
 import (
   "net/http"
   "fmt"
+  "dal-api/db"
 )
 
 func main() {
@@ -14,7 +15,8 @@ func main() {
 }
 
 func welcome(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "Welcome!")
+  w.Header().Set("Content-Type", "application/json")
+  fmt.Fprintf(w, string(db.Open()))
 }
 
 func courses(w http.ResponseWriter, r *http.Request) {
