@@ -16,7 +16,7 @@ func main() {
 
 func welcome(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  fmt.Fprintf(w, string(db.Open()))
+  fmt.Fprintf(w, string(db.Open("CSCI")))
 }
 
 func courses(w http.ResponseWriter, r *http.Request) {

@@ -4,6 +4,7 @@ import (
   _ "github.com/go-sql-driver/mysql"
   "database/sql"
   "encoding/json"
+  "strconv"
 )
 
 type Class struct {
@@ -22,24 +23,38 @@ type Class struct {
 }
 
 type Course struct {
+  Category string `json:"category"`
+  Code string `json:"code"`
   Title string `json:"title"`
+  Classes []Class  `json:"classes"`
 }
 
-func Open() []byte {
-  db, err := sql.Open("mysql", "root:lalaland123@/dal")
+func Open(code string) []byte {
+  db, _ := sql.Open("mysql", "root:lalaland123@/dal")
 
   // seeing if I can get a working json return
-  var queryStr string = "SELECT * FROM classes"
-  rows, _ := db.Query(queryStr)
+  var courseQuery string = "SELECT id, category, code, title FROM courses WHERE category='" + code + "';"
+  rows, _ := db.Query(courseQuery)
 
   var storage struct {
-    Data []Class  `json:"data"`
+    Data []Course `json:"data"`
   }
 
   defer rows.Close()
   for rows.Next() {
-    var c Class
-    rows.Scan(&c.Id, &c.Crn, &c.Section, &c.Type, &c.CreditHours, &c.Days, &c.Times, &c.Location, &c.Max, &c.Current, &c.Waitlist, &c.Prof)
+
+    var c Course
+    var cid int
+    rows.Scan(&cid, &c.Category, &c.Code, &c.Title)
+
+    var classQuery string = "SELECT classes.* FROM classes INNER JOIN course_classes ON course_classes.class=classes.id INNER JOIN courses ON course_classes.course=courses.id where course_classes.course=" + strconv.Itoa(cid) + ";"
+
+    classRows, _ := db.Query(classQuery)
+    for classRows.Next() {
+      var cl Class
+      classRows.Scan(&cl.Id, &cl.Crn, &cl.Section, &cl.Type, &cl.CreditHours, &cl.Days, &cl.Times, &cl.Location, &cl.Max, &cl.Current, &cl.Waitlist, &cl.Prof)
+      c.Classes = append(c.Classes, cl)
+    }
     storage.Data = append(storage.Data, c)
   }
 
