@@ -29,11 +29,11 @@ type Course struct {
   Classes []Class  `json:"classes"`
 }
 
-func Open(code string) []byte {
-  db, _ := sql.Open("mysql", "root:lalaland123@/dal")
+func Open(code string, term string) []byte {
+  db, _ := sql.Open("mysql", "root:chickensoup3@/dal")
 
   // seeing if I can get a working json return
-  var courseQuery string = "SELECT id, category, code, title FROM courses WHERE category='" + code + "';"
+  var courseQuery string = "SELECT id, category, code, title FROM courses WHERE category='" + code + "' and term=" + term + ";"
   rows, _ := db.Query(courseQuery)
 
   var storage struct {

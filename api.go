@@ -20,5 +20,6 @@ func courses(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Access-Control-Allow-Origin", "*")
   w.Header().Set("Content-Type", "application/json")
   category := r.URL.Query().Get("s")
-  fmt.Fprintf(w, string(db.Open(category)))
+  term := r.URL.Query().Get("t")
+  fmt.Fprintf(w, string(db.Open(category, term)))
 }
