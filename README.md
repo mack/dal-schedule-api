@@ -5,10 +5,10 @@ API for the dal schedule builder web app. Being used in my dal schedule builder 
 Simply build and run the api.go and it will start the REST API.
 The API takes in 2 parameters, the subject code (i.e CSCI) and the term (1 = fall, 2 = winter).
 
-websiteexample.com/api/courses?s=`SUBJECT CODE`&t=`TERM`
+dalschedulebuilder.com/api/courses?s=`SUBJECT CODE`&t=`TERM`
 
 ## Example Response
-websiteexample.com/api/courses?s=CSCI&t=1
+dalschedulebuilder.com/api/courses?s=CSCI&t=1
 Returns all the CSCI courses for fall term.
 
 Some courses have been removed for simplicity sake.
