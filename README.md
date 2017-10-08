@@ -1,5 +1,5 @@
 # DalhousieScheduleBuilderAPI
-API for the dal schedule builder web app.
+API for the dal schedule builder web app. Being used in my dal schedule builder which can be found at http://dalschedulebuilder.com
 
 ## Usage
 Simply build and run the api.go and it will start the REST API.
